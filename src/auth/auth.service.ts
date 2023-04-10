@@ -4,11 +4,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Request } from 'express';
-import { sign } from 'jsonwebtoken';
 import { Model } from 'mongoose';
-import { User } from 'src/users/model/users.model';
+import { sign } from 'jsonwebtoken';
+import { Request } from 'express';
 import { JwtPayload } from './models/jwt-payload.model';
+import { User } from 'src/users/model/users.model';
 
 @Injectable()
 export class AuthService {
@@ -28,12 +28,12 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('User not found.');
     }
-
     return user;
   }
 
-  private static jwtExtractor(req: Request): string {
-    const authHeader = req.headers.authorization;
+  private static jwtExtractor(request: Request): string {
+    const authHeader = request.headers.authorization;
+
     if (!authHeader) {
       throw new BadRequestException('Bad request.');
     }
@@ -43,7 +43,7 @@ export class AuthService {
     return token;
   }
 
-  public returnJwtExtractor(): (req: Request) => string {
+  public returnJwtExtractor(): (request: Request) => string {
     return AuthService.jwtExtractor;
   }
 }
